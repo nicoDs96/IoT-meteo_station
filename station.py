@@ -5,7 +5,7 @@ import logging
 import time
 import json
 import GLOBAL_PARAMS
-
+import datetime
 
 
 # TODO: implement persistence
@@ -115,13 +115,15 @@ if __name__ == "__main__":
     while True:
         temperature, humidity, wind_direction, wind_intensity, rain_height = read_sensors()
         data = {}
+        data['station_id'] = clientId
+        data['timestamp'] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
         data['temperature'] = temperature
         data['humidity'] = humidity
         data['wind_direction'] = wind_direction
         data['wind_intensity'] = wind_intensity
         data['rain_height'] = rain_height
         send_data(myAWSIoTMQTTClient, data, topic)
-        time.sleep(10)
+        time.sleep(1)
 
     myAWSIoTMQTTClient.disconnect()
 
