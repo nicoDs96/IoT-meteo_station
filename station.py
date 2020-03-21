@@ -7,6 +7,7 @@ import json
 import GLOBAL_PARAMS
 
 
+
 # TODO: implement persistence
 # TODO: QoS at least 1
 # TODO: client to show data -> subscriber + cusotm callback + dashboard
@@ -111,11 +112,6 @@ if __name__ == "__main__":
     myAWSIoTMQTTClient =  init_mqtt_connection(clientId=clientId)
     myAWSIoTMQTTClient.connect()
 
-
-    def disconnect():
-        myAWSIoTMQTTClient.disconnect()
-        print("\nDISCONNECTED\n")
-
     while True:
         temperature, humidity, wind_direction, wind_intensity, rain_height = read_sensors()
         data = {}
@@ -125,7 +121,7 @@ if __name__ == "__main__":
         data['wind_intensity'] = wind_intensity
         data['rain_height'] = rain_height
         send_data(myAWSIoTMQTTClient, data, topic)
-        time.sleep(1)
+        time.sleep(10)
 
     myAWSIoTMQTTClient.disconnect()
 
