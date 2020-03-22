@@ -2,7 +2,7 @@ from station import init_mqtt_connection
 import time
 import sqlite3
 import json
-
+import argparse
 
 
 
@@ -54,12 +54,25 @@ def store_data(client, userdata, message):
     # We can also close the connection if we are done with it.
     # Just be sure any changes have been committed or they will be lost.
     conn.close()
+    print("Received and Stored a New Message. Sender: %s."%str(data['station_id']))
 
 
 if __name__ == "__main__":
 
     clientId = 'cons1'
     topic = 'station'
+    parser = argparse.ArgumentParser(
+        description='Init Simulated Weather Station Receiver (MQTT Consumer) with proper clientId and topic name.')
+
+    parser.add_argument('--clientid', type=str, default='cons1',
+                        help='AWS IoT core Client Id. Allowed values \'cons1\' or \'cons2\'')
+    parser.add_argument('--topic', type=str, default='station',
+                        help='Topic to publish to. Allowed values: \'station\' or \'station2\'')
+    args = parser.parse_args()
+
+    print("========== Running With ==========\nClientID:\t%s\nTopic:\t%s" % (str(args.clientid), str(args.topic)))
+    clientId = args.clientid
+    topic = args.topic
 
     # Connect and subscribe to AWS IoT
     myAWSIoTMQTTClient = init_mqtt_connection(clientId=clientId)
