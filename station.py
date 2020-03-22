@@ -1,17 +1,17 @@
 import random as r
 import math
+import sys
+
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 import logging
 import time
 import json
 import GLOBAL_PARAMS
 import datetime
+import argparse
 
 
-# TODO: implement persistence
 # TODO: QoS at least 1
-# TODO: client to show data -> subscriber + cusotm callback + dashboard
-# TODO: if required add storage
 
 
 
@@ -109,9 +109,22 @@ if __name__ == "__main__":
     clientId = 'station1'
     topic = 'station'
 
+    parser = argparse.ArgumentParser(description='Init Simulated Weather Station (MQTT Client) with proper clientId and topic name.')
+
+    parser.add_argument('--clientid', type=str, default='station1', help='AWS IoT core Client Id. Allowed values \'station1\' or \'station2\'')
+    parser.add_argument('--topic', type=str, default='station', help='Topic to publish to. Allowed values: \'station\' or \'station2\'')
+    args = parser.parse_args()
+
+    print( "========== Running With ==========\nClientID:\t%s\nTopic:\t%s"%(str(args.clientid),str(args.topic) ) )
+    clientId = args.clientid
+    topic = args.topic
+
+    #sys.exit(0)
+
     myAWSIoTMQTTClient =  init_mqtt_connection(clientId=clientId)
     myAWSIoTMQTTClient.connect()
 
+    i = 0
     while True:
         temperature, humidity, wind_direction, wind_intensity, rain_height = read_sensors()
         data = {}
