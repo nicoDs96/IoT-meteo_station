@@ -1,9 +1,0 @@
-TODO:
-- at least 2 stations OK
-- Display the latest values received from all the sensors of a specified environmental station.
-  (1 DASHBOARD per station)
-- Display the values received during the last hour from all environmental station of a specified sensor. (1 chart per sensor filtered within the last hour)
-
-- 3 min yt video
-- hands on tutorial
-- Create a GitHub repository where you will push all your code and scripts that are need to realize the above assignment, along with a main README.md file where you provide links to your video and post. 
