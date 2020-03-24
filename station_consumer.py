@@ -12,15 +12,6 @@ def store_data(client, userdata, message):
 
     msg = message.payload.decode('utf8')#.replace("'", '"')
     data = json.loads( msg )
-    '''print("NO EXC - Check access to data:")
-    print(str(data['station_id']))
-    print(str(data['timestamp']))
-    print(str(data['temperature']))
-    print(str(data['humidity']))
-    print(str(data['wind_direction']))
-    print(str(data['wind_intensity']))
-    print(str(data['rain_height']))
-    print("-------------------------\n\n\n")'''
 
     conn = sqlite3.connect('db/Stations.db')
     c = conn.cursor()

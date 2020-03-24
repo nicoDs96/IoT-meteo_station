@@ -39,7 +39,6 @@ def read_sensors():
     humidity = r.gauss(GLOBAL_PARAMS.HUM_MEAN, GLOBAL_PARAMS.HUM_STD) + gaussian_noise
     humidity = clip_value(GLOBAL_PARAMS.HUM_MIN, GLOBAL_PARAMS.HUM_MAX, humidity)  # (0 ... 100%)
 
-    gaussian_noise = r.gauss(GLOBAL_PARAMS.NOISE_MEAN, GLOBAL_PARAMS.NOISE_STD)
     wind_direction = math.degrees(r.vonmisesvariate(GLOBAL_PARAMS.WIND_D_MU, GLOBAL_PARAMS.WIND_D_K))
 
     gaussian_noise = r.gauss(GLOBAL_PARAMS.NOISE_MEAN, GLOBAL_PARAMS.NOISE_STD)
@@ -69,7 +68,7 @@ def init_mqtt_connection(useWebsocket = False,
     certificatePath = certificatePath
 
     logger = logging.getLogger("AWSIoTPythonSDK.core")
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.NOTSET)
     streamHandler = logging.StreamHandler()
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     streamHandler.setFormatter(formatter)
