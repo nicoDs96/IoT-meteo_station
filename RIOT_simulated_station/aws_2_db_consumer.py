@@ -13,7 +13,7 @@ def store_data(client, userdata, message):
     msg = message.payload.decode('utf8')#.replace("'", '"')
     data = json.loads( msg )
 
-    conn = sqlite3.connect('db/Stations.db')
+    conn = sqlite3.connect('../db/Stations.db')
     c = conn.cursor()
     # Create table TODO: remove it
     c.execute('''CREATE TABLE IF NOT EXISTS stations_data

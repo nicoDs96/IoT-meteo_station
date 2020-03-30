@@ -1,0 +1,7 @@
+*.cert
+*.cert.pem
+*.*.key
+*.pyc
+.idea
+img/
+station_consumer_realtime.py
