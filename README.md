@@ -1,6 +1,15 @@
 # Internet of Things Environmental station
-A Simulated IoT system using Python, AWS IoT Core, Apache Superset and one between  {AWS S3 and AWS Athena} or SQLite database.
-## Links
+todo: change about this direcotry paragraph.
+## Assignement 2
+A IoT system using RIOT OS, A Python Transparent Gateway, AWS IoT Core, Apache Superset and one between  {AWS S3 and AWS Athena} or SQLite database.
+### Links
+System Demo (Youtube): <br><br>
+
+Tutorial and Description (Linkedin Blog): 
+
+## Assignement 1 
+A Simulated IoT system using Python, AWS IoT Core, Apache Superset and one between  {AWS S3 and AWS Athena} or SQLite database. (directory: python_simulated_station)
+### Links
 System Demo (Youtube): https://youtu.be/tRe6Aw1Ow0k <br><br>
 Cutted video (YouTube): https://youtu.be/aOt-4mvsAAo <br><br>
 Tutorial and Description (Linkedin Blog): https://www.linkedin.com/pulse/setting-up-complete-iot-system-aws-core-apache-python-nicola-di-santo
