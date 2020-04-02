@@ -1,4 +1,4 @@
-from station import init_mqtt_connection
+from gateway import init_mqtt_connection
 import time
 import sqlite3
 import json
@@ -11,11 +11,26 @@ def store_data(client, userdata, message):
 
 
     msg = message.payload.decode('utf8')#.replace("'", '"')
-    data = json.loads( msg )
-
+    print(" Received [1:n-1] %s \n\n"%msg[1:len(msg)-1])
+    data = json.loads(msg[1:len(msg)-1]  ) #[1:len(msg)-1]
+    
+   
+    #print("DEBUG %s"%msg)
+    print("----------------")
+    #print("DATA_JS:")
+    #print(data)
+    '''print("--------------DICT--------------")
+    print(str(data['station_id']) ) 
+    print(str(data['timestamp'])) 
+    print(str(data['temperature']) )
+    print(str(data['humidity']) )
+    print(str(data['wind_direction']) )
+    print(str(data['wind_intensity'] ) )
+    print(str(data['rain_height']) )'''
+     
     conn = sqlite3.connect('../db/Stations.db')
     c = conn.cursor()
-    # Create table TODO: remove it
+    
     c.execute('''CREATE TABLE IF NOT EXISTS stations_data
                  (station_id text not null,
                  time_stamp datetime not null,  
@@ -26,7 +41,7 @@ def store_data(client, userdata, message):
                  rain_height float,
                  primary key(station_id, time_stamp)
                  )'''
-              )
+             )
 
     # Insert a row of data
     c.execute("INSERT INTO stations_data VALUES "
@@ -46,7 +61,8 @@ def store_data(client, userdata, message):
     # Just be sure any changes have been committed or they will be lost.
     conn.close()
     print("Received and Stored a New Message. Sender: %s."%str(data['station_id']))
-
+    
+    
 
 if __name__ == "__main__":
 

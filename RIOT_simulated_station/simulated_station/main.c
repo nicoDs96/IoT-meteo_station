@@ -1,23 +1,3 @@
-/*
- * Copyright (C) 2015 Freie Universität Berlin
- *
- * This file is subject to the terms and conditions of the GNU Lesser
- * General Public License v2.1. See the file LICENSE in the top level
- * directory for more details.
- */
-
-/**
- * @ingroup     examples
- * @{
- *
- * @file
- * @brief       Example application for demonstrating RIOT's MQTT-SN library
- *              emCute
- *
- * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
- *
- * @}
- */
 
 #include <stdio.h>
 #include <string.h>
@@ -123,6 +103,7 @@ static int pub_msg(char topic[], char message[], char QoS[])
         puts("error: unable to obtain topic ID");
         return 1;
     }
+   
 
     /* step 2: publish data */
     if (emcute_pub(&t, message, strlen(message), flags) != EMCUTE_OK) {
@@ -142,7 +123,7 @@ static int pub_msg(char topic[], char message[], char QoS[])
  *
  */
 
-static int start_simulation(char id[])
+static int start_station(char id[])
 {
        
     printf("Setting Station_id and Topic to: %s",id);
@@ -172,11 +153,11 @@ static int start_simulation(char id[])
         char date_time[30];
         time_t t = time(NULL);
         struct tm tm = *localtime(&t);
-        sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
         //define the message as a string and print values in the message string
         char message[200];
-        sprintf(message, "{\"station_id\":\"%s\",\"timestamp\":\"%s\",\"temperature\":\"%u\",\"humidity\":\"%u\",\"wind_direction\":\"%u\",\"wind_intensity\":\"%u\",\"rain_height\":\"%u\"}",
+        sprintf(message, "{\"station_id\":\"%s\",\"timestamp\":\"%s\",\"temperature\":%u,\"humidity\":%u,\"wind_direction\":%u,\"wind_intensity\":%u,\"rain_height\":%u}",
                  id,date_time,temp,hum,wind_i,wind_d,rain_h);
         
         //Print only the first message to give a feedback about data.
@@ -189,7 +170,7 @@ static int start_simulation(char id[])
            //Publish to topic
         pub_msg(id, message, "0"); //params: @topic_id, @message, @QoS <- NOTE topic name is the same of id
         i += 1;
-        xtimer_sleep(1);
+        xtimer_sleep(3);
     }
 
 
@@ -203,7 +184,7 @@ static int start_simulation(char id[])
         printf("Usage: %s station_id\n", argv[0]);
         return 1;
     }
-    start_simulation(argv[1]);
+    start_station(argv[1]);
     return 0;
 }
 
