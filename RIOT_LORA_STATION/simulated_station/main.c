@@ -117,7 +117,11 @@ static int pub_msg(char message[])
 		    case SEMTECH_LORAMAC_TX_ERROR: 
 		    printf("SEMTECH_LORAMAC_TX_ERROR\n");
 		    break; //causa l'uscita immediata dallo switch
-		    /*case SEMTECH_LORAMAC_RX_DATA: 
+		    /*
+		    ===================================================
+		    Those case are commented since not recognized on Iot-Lab Testbed at compiletime
+		    ===================================================
+		    case SEMTECH_LORAMAC_RX_DATA: 
 		    printf("SEMTECH_LORAMAC_RX_DATA");
 		    break; //causa l'uscita immediata dallo switch
 		    case SEMTECH_LORAMAC_RX_LINK_CHECK: 
@@ -143,7 +147,7 @@ static int pub_msg(char message[])
     return 0;
 }
 
-/* 
+/*
  * Simulating Environmental Station
  * And sending values to mqtts to Broker.
  *
@@ -161,6 +165,7 @@ static int start_station(void)
             return 1;
         } else{
             connected = true; //do not connect again
+            /* start receiving thread */
             thread_create(_recv_stack, sizeof(_recv_stack), THREAD_PRIORITY_MAIN - 1, 0, _recv, NULL, "recv thread");
         }
     }
@@ -169,25 +174,46 @@ static int start_station(void)
     random_init(seed);
     int i = 0;
     while(1){
-        //Simulate Sensors values
-        uint8_t temp = (uint8_t)random_uint32_range(TEMP_MIN, 2*TEMP_MAX);
-        uint8_t hum = (uint8_t)random_uint32_range(HUM_MIN, HUM_MAX );
-        uint8_t wind_i = (uint8_t)random_uint32_range(WIND_I_MIN, WIND_I_MAX);
-        uint8_t wind_d = (uint8_t)random_uint32_range(WIND_D_MIN, WIND_D_MAX);
-        uint8_t rain_h = (uint8_t)random_uint32_range(RAIN_H_MIN, RAIN_H_MAX);
-
-        //Get the current time and print it into the string date_time
-        /*char date_time[30];
-        time_t t = time(NULL);
-        struct tm tm = *localtime(&t);
-        sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-
-        //define the message as a string and print values in the message string
-        char message[200];
-        sprintf(message, "{\"station_id\":\"%s\",\"timestamp\":\"%s\",\"temperature\":%u,\"humidity\":%u,\"wind_direction\":%u,\"wind_intensity\":%u,\"rain_height\":%u}",
-                 id,date_time,temp,hum,wind_i,wind_d,rain_h);*/
+        uint8_t aggregate_count = 0;
+        uint8_t aggregation_window_size = 60; //sec
+        /*
+        collect data each 1sec, compute the avg over a time window of size
+        aggregation_window_size and then send one message containing the
+        aggregate measure.
+        */
+        uint8_t temp_agg = 0; 
+        uint8_t hum_agg =  0;
+        uint8_t wind_i_agg = 0;
+        uint8_t wind_d_agg = 0;
+        uint8_t rain_h_agg = 0;
+        
+        while(aggregate_count < aggregation_window_size){ 
+            aggregate_count += 1;
+            
+            //Simulate Sensors values
+            uint8_t temp = (uint8_t)random_uint32_range(TEMP_MIN, TEMP_MAX);
+            uint8_t hum = (uint8_t)random_uint32_range(HUM_MIN, HUM_MAX );
+            uint8_t wind_i = (uint8_t)random_uint32_range(WIND_I_MIN, WIND_I_MAX);
+            uint8_t wind_d = (uint8_t)random_uint32_range(WIND_D_MIN, WIND_D_MAX);
+            uint8_t rain_h = (uint8_t)random_uint32_range(RAIN_H_MIN, RAIN_H_MAX);
+            
+            //compute the avg value (each measurement will contribute with weight 1/aggregation_window_size
+            temp_agg += temp/aggregation_window_size; 
+            hum_agg +=  hum/aggregation_window_size;
+            wind_i_agg += wind_i/aggregation_window_size;
+            wind_d_agg += wind_d/aggregation_window_size;
+            rain_h_agg += rain_h/aggregation_window_size;
+            
+            /* wait 1 sec to measure again */
+            xtimer_sleep(1); //sec
+        
+        }
+        /*
+        since LoRa requires low weight payload we try to be as minimal as possible 
+        to be fair with other users of the network
+        */
         char message[30];
-        sprintf(message, "%u,%u,%u,%u,%u", temp,hum,wind_i,wind_d,rain_h);
+        sprintf(message, "%d,%d,%d,%d,%d", temp_agg,hum_agg,wind_i_agg,wind_d_agg,rain_h_agg);
         
         //Print only the first message to give a feedback about data.
         if(i<1){
@@ -196,14 +222,19 @@ static int start_station(void)
             puts("\n\nFuture Messages won't be printed.\n--------------------------------\n");
             i++;
         }
-           //Publish to TTN 
+           
+        /*
+        
+        */ 
+           
+        //Publish to TTN 
         int retry = 0;
         while(retry<10){
                 
             retry++;
             
             if( pub_msg(message) == 1){
-                printf("Failed sending %d/10 times.\nI will retry in 1 minute.\n",retry);
+                printf("Tentative %d of 10 failed.\nI will retry to send in 1 minute.\n",retry);
                 xtimer_sleep(60); //sec
             }
             else{
@@ -212,7 +243,7 @@ static int start_station(void)
             }
         } 
         
-        xtimer_sleep(60*5); //sleep 5 minutes and send another message
+        xtimer_sleep(60); //sleep 1 minutes and send another message
     }
 
 
