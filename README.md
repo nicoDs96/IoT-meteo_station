@@ -8,7 +8,9 @@ Project Directories structure:
 │── RIOT_LORA_STATION               # code from the third assignement (LoRa comunication)
 │   │
 │   ├── simulated_station
-│   └── ttn_aws_gw.py
+│   ├── simulated_station2
+│   ├── ttn_aws_gw.py
+│   └── aws_2_db_consumer.py
 │
 │   
 ├── RIOT_simulated_station          # code to simulate env. station in RIOT OS
