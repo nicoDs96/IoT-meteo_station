@@ -44,9 +44,9 @@ I used Generic Sensor API to access data from the mobile device then we sent the
 ### Links
 Attempt to Classify Data with a CNN: [Link](https://github.com/nicoDs96/IoT-meteo_station/blob/master/Copy_of_UserActivityRecognition_IoTAss4.ipynb) <br><br>
 
-System Demo (Youtube): https://youtu.be/ <br><br>
+System Demo (Youtube): https://youtu.be/gJ93i-Wi2Cw <br><br>
 
-Tutorial and Description (Linkedin Blog): https://www.linkedin.com/pulse/ <br><br><br><br>
+Tutorial and Description (Linkedin Blog): https://www.linkedin.com/pulse/user-activity-monitoring-browser-using-generic-sensor-nicola-di-santo/ <br><br><br><br>
 
 
 
