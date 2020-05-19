@@ -1,13 +1,6 @@
 var express = require('express');
 var mqtt = require('mqtt');
 var cors = require('cors');
-var fs = require('fs');
-var http = require('http');
-var https = require('https');
-var privateKey  = fs.readFileSync('cert/192.168.1.63.key', 'utf8');
-var certificate = fs.readFileSync('cert/192.168.1.63.crt', 'utf8');
-
-var credentials = {key: privateKey, cert: certificate};
 
 
 var app = express();
@@ -39,7 +32,8 @@ app.use(express.json()); // for parsing application/json
 app.use(cors());
 
 app.get('/test', function (req, res) {
-    res.send('Hello World!');
+    testRes = {Hello:'World'};
+    res.send(JSON.stringify(testRes));
 });
 
 app.get('/state/:clientId', function (req, res) {
@@ -54,6 +48,32 @@ app.get('/state/:clientId', function (req, res) {
     else{
         res.status(404).send({});
     }
+    
+});
+
+app.post('/state/:clientId', function (req, res) {
+    
+    let cId = req.params.clientId;
+    
+    
+    try {
+        console.log(req.body);
+        
+        //msgText= JSON.parse(req.body);
+        msgText = req.body;
+        topic = `sensor/${cId.toString()}/activity`;
+        
+        client.publish(topic, JSON.stringify( req.body ));
+        
+        res.type('application/json');
+        res.status(200);
+        res.send({});
+    }
+    catch (e) {
+        console.error("Error : " + e);
+        res.status(500).send("500 - Internal Error");
+    }
+        
     
 });
 
@@ -84,14 +104,9 @@ app.use(function(req, res, next) {
     res.status(404).send('Sorry cant find that!');
 });
 
-/*app.listen(3000, function () {
+app.listen(3000, function () {
     console.log('Example app listening on port 3000!');
-});*/
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
-
-httpServer.listen(3001);
-httpsServer.listen(3000);
+});
 
 
 // called when the client connects

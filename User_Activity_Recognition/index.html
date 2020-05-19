@@ -1,0 +1,135 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+   
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>User Activity Recognition</title>
+  <meta name="description" content="user activity recognition with Generic Sensor API">
+  <meta name="author" content="Nicola Di Santo">
+  <!--Bootstrap CDN-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <style>
+
+  /*thead, tbody { display: block; }
+
+  tbody {
+    height: 500px;
+    width: 100%;        Just for the demo          */
+   /* overflow-y: auto;     Trigger vertical scroll    */
+    /*overflow-x: auto;  /* Hide the horizontal scroll */
+  /*}*/
+
+  body {
+  --table-width: 100%; /* Or any value, this will change dinamically */
+  }
+  tbody {
+    display:block;
+    max-height:500px;
+    overflow-y:auto;
+  }
+  thead, tbody tr {
+    display:table;
+    width: var(--table-width);
+    table-layout:fixed;
+  }
+  </style>
+
+</head>
+
+<body>
+ <!-- <script src="js/scripts.js"></script>-->
+
+ <!-- As a heading -->
+<nav class="navbar navbar-light bg-light">
+  <span class="navbar-brand mb-0 h1">User Activity Recognition</span>
+</nav>
+<div id="title-cont"></div>
+
+
+<div class="container" style="margin-left: 3%;padding-right: 3%;">
+
+  <div class="row ">
+    <label for="basic-url">Insert a valid Tunnel Url to start monitoring</label>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control input-block-level" id="basic-url" aria-describedby="basic-addon3" placeholder=" https://21a18245.ngrok.io ">
+      <button type="button" class="btn btn-outline-dark" id="setTunnel">Set Tunnel</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="checkbox">
+      <label><input type="checkbox" id="edge-flag" value=""> Edge Recognition (Check to perform User Activity recognition locally)</label>
+    </div>
+  </div>
+
+  <div class="row ">
+    <button type="button" class="btn btn-outline-success" id="start">Start</button>
+    <button type="button" class="btn btn-outline-warning" id="stop">Stop</button>
+    <button type="button" class="btn btn-outline-secondary" id="clean">Clean</button>
+  </div>
+
+  <div class="row"><span class="font-weight-bold">Activity:&nbsp;</span> <span id="activity">Waiting</span></div>
+ 
+  
+  <div class="row"></div>
+  
+   <!--Raw value-->
+  <div class="row"> Live Raw Data:
+    <div class="col-sm" id="x"></div>
+    <div class="col-sm" id="y"></div>
+    <div class="col-sm" id="z"></div>
+  </div>
+  <!--filtered value-->
+  <div class="row"> Live Gravity:
+    <div class="col-sm" id="x_filt"></div>
+    <div class="col-sm" id="y_filt"></div>
+    <div class="col-sm" id="z_filt"></div>
+  </div>
+<!-- filtered_value -->
+  <div class="row">Live Linear Acceleration:
+    <div class="col-sm" id="x-f"></div>
+    <div class="col-sm" id="y-f"></div>
+    <div class="col-sm" id="z-f"></div>
+  </div>
+  <!-- filtered_value -->
+  <div class="row" >Live Linear Acceleration Module:
+    <div class="col-sm" id="acc-mod"></div>
+  </div>
+ 
+  <!--History -->
+  <div class="row table-responsive" > Data History 
+    <table class="table table-dark " >
+      <thead>
+        <tr>
+          <th scope="col">Act</th>
+          <th scope="col">Lin. Acl. Mod.</th>
+          <th scope="col">Lin. Acl. X</th>
+          <th scope="col">Lin. Acl. Y</th>
+          <th scope="col">Lin. Acl. Z</th>
+          <th scope="col">Raw X</th>
+          <th scope="col">Raw Y</th>
+          <th scope="col">Raw Z</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        
+       
+      </tbody>
+    </table>
+  </div>
+
+  
+</div>
+
+  
+ <script type="text/javascript" src="main.js"> </script>
+</body>
+</html>
