@@ -1,6 +1,15 @@
 # Internet of Things Environmental station
 Project Directories structure:
 ```
+├──User_Activity_Recognition     # browser user activity recognition code
+│   ├── classifier               # folder with dumb python classifier
+|   ├── forwarder                # NodeJs API to Bridge the local broker and AWS IoT Core
+|   ├── index.html               # HTML5 page accessing the sensors
+|   └── main.js                  # JS script embedded into index.html implementing sensor access   
+|──Copy_of_UserActivityRecognition_IoTAss4.ipynb  # attempt to classify data with a CNN
+|
+|
+|
 ├── db                              #SQLite database with real data (.tables to see all available tables)
 │   
 ├── python_simulated_station        # code from the first assignment simulating env. station with python
@@ -27,6 +36,18 @@ Project Directories structure:
 
 
 ```
+
+## User Activity Monitoring In The Browser Using Generic Sensor API - Assignment 4
+A Crowd Sensing system using HTML5, Javascript, Generic Sensor API and AWS IoT Core. <br><br>
+I used Generic Sensor API to access data from the mobile device then we sent them to a simple REST API written in NodeJS in charge of forwarding data to the broker. We are going to detect if the user is either moving or laying, the HTML page will allow the user to select if to use Edge classifier (running locally and sending to the back-end only classification information) or a Cloud classifier (send raw data to the cloud and retrieve classification information).  
+
+### Links
+Attempt to Classify Data with a CNN: [Link](https://github.com/nicoDs96/IoT-meteo_station/blob/master/Copy_of_UserActivityRecognition_IoTAss4.ipynb) <br><br>
+
+System Demo (Youtube): https://youtu.be/ <br><br>
+
+Tutorial and Description (Linkedin Blog): https://www.linkedin.com/pulse/ <br><br><br><br>
+
 
 
 ## Saving Energy Using LoRaWAN - Assignment 3
